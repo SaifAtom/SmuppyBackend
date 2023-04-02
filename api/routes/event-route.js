@@ -1,87 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Event = require('../models/event');
+const eventController = require('../controllers/event-controller')
 
 const router = express.Router();
 
 // Create a new event
-router.post('/', async (req, res) => {
-  const { content, title, author_id, location } = req.body;
-
-  const event = new Event({
-    _id: mongoose.Types.ObjectId(),
-    content,
-    title,
-    author_id,
-    location,
-  });
-
-  try {
-    await event.save();
-    res.status(201).json(event);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Unable to create event' });
-  }
-});
+router.post('/',eventController.create_event);
 
 // Get all events
-router.get('/', async (req, res) => {
-  try {
-    const events = await Event.find();
-    res.json(events);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Unable to get events' });
-  }
-});
+router.get('/', eventController.get_All_events);
 
 // Get a single event by ID
-router.get('/:eventId', async (req, res) => {
-  const { eventId } = req.params;
-
-  try {
-    const event = await Event.findById(eventId);
-    if (!event) {
-      return res.status(404).json({ error: 'Event not found' });
-    }
-    res.json(event);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Unable to get event' });
-  }
-});
+router.get('/:eventId', eventController.getEventById);
 
 // Update an event by ID
-router.patch('/:eventId', async (req, res) => {
-  const { eventId } = req.params;
-
-  try {
-    const event = await Event.findByIdAndUpdate(eventId, req.body, { new: true });
-    if (!event) {
-      return res.status(404).json({ error: 'Event not found' });
-    }
-    res.json(event);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Unable to update event' });
-  }
-});
+router.patch('/:eventId',eventController.update_event);
 
 // Delete an event by ID
-router.delete('/:eventId', async (req, res) => {
-  const { eventId } = req.params;
-
-  try {
-    const event = await Event.findByIdAndDelete(eventId);
-    if (!event) {
-      return res.status(404).json({ error: 'Event not found' });
-    }
-    res.json(event);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Unable to delete event' });
-  }
-});
+router.delete('/:eventId', eventController.delete_event);
 
 module.exports = router;

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/auth-controller')
 const followController = require("../controllers/user-subcontrollers/follow-controller")
+const messageController = require("../controllers/user-subcontrollers/message-controllers")
 const path = require('path');
 
 //auth
@@ -18,8 +19,7 @@ router.get("/count_followers/:id",followController.countFollowers)
 router.get("/followers",followController.getFollowers)
 
 
-
 //Messages
-
+router.post("/sendMessage",messageController.sendMessage)
 
 module.exports = router
