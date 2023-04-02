@@ -7,4 +7,4 @@ const locationSchema = new mongoose.Schema({
     altitude : mongoose.Schema.Types.ObjectId,
 },{timestamps:true})
 
-module.exports = mongoose.model('Location',postSchema)
+module.exports = mongoose.model('Location',locationSchema)

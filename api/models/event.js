@@ -6,7 +6,7 @@ const eventSchema = new mongoose.Schema({
     content : {required : true,type :String},
     title : String,
     author_id : mongoose.Schema.Types.ObjectId,
-    location : {type:location}
+    location_id : {type:mongoose.Schema.Types.ObjectId}
 },{timestamps:true})
 
 module.exports = mongoose.model('Event',eventSchema)
