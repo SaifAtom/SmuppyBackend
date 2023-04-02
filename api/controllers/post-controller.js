@@ -49,4 +49,16 @@ exports.update_post=(req,res)=>{
         err=>{res.status(500).json(err)}
     )
 }
-    
+
+exports.getPostsByAuthorId=async (req, res) => {
+    const author_id = req.params.author_id
+  
+    try {
+      const posts = await Post.find({ author_id: author_id }).exec()
+      res.status(200).json(posts)
+    } catch (err) {
+      console.error(err)
+      res.status(500).json({ error: 'Internal server error' })
+    }
+  }
+  

@@ -15,5 +15,11 @@ router.get("/verification/assets/icons/love_icon.png",(req,res)=>{
 //following
 router.patch("/follow",followController.follow)
 router.get("/count_followers/:id",followController.countFollowers)
+router.get("/followers",followController.getFollowers)
+
+
+
+//Messages
+
 
 module.exports = router

@@ -56,3 +56,21 @@ exports.countFollowers = (req,res)=>{
         err=>{console.log(err)}
     )
 }
+
+exports.getFollowers=async(req, res)=>{
+    const userId = req.params.userId
+  
+    try {
+      const user = await User.findById(userId).populate('followers').exec()
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' })
+      }
+  
+      const followers = user.followers
+      res.status(200).json(followers)
+    } catch (err) {
+      console.error(err)
+      res.status(500).json({ error: 'Internal server error' })
+    }
+  }
