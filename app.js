@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require("mongoose")
 const morgan = require("morgan")
 const bodyparser = require('body-parser')	
-	
+const checkAuth = require('./api/middleware/check-auth');
 
 
 
@@ -37,6 +37,6 @@ const authRouter = require('./api/routes/auth-route')
 const postRouter = require('./api/routes/post-route')
 const eventRouter = require('./api/routes/event-route')
 app.use('/auth',authRouter)
-app.use('/post',postRouter)
+app.use('/post',checkAuth,postRouter)
 app.use('/event',eventRouter);
 module.exports = app

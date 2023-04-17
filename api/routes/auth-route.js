@@ -4,6 +4,7 @@ const authController = require('../controllers/auth-controller')
 const followController = require("../controllers/user-subcontrollers/follow-controller")
 const messageController = require("../controllers/user-subcontrollers/message-controllers")
 const path = require('path');
+const checkAuth = require('../middleware/check-auth');
 
 //auth
 router.post("/signup",authController.user_signup)
@@ -14,12 +15,12 @@ router.get("/verification/assets/icons/love_icon.png",(req,res)=>{
 })
 
 //following
-router.patch("/follow",followController.follow)
-router.get("/count_followers/:id",followController.countFollowers)
-router.get("/followers",followController.getFollowers)
-
+router.patch("/follow",checkAuth, followController.follow)
+router.get("/count_followers/",checkAuth, followController.countFollowers)
+router.get("/followers",checkAuth, followController.getFollowers)
+router.get("/followings",checkAuth, followController.getFollowings)
 
 //Messages
-router.post("/sendMessage",messageController.sendMessage)
+router.post("/sendMessage", checkAuth, messageController.sendMessage)
 
 module.exports = router

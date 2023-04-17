@@ -3,22 +3,28 @@ const Post = require("../models/post")
 const fs = require("fs")
 
 
+// Create Post
+exports.create_post = async (req, res, next) => {
+    try {
+        console.log(req.body); // log the request body to the console
 
-exports.create_post= async (req,res,next)=>{
-    const post = new Post({
-        _id : new mongoose.Types.ObjectId(),
-        content : req.body.content,
-        image : req.file.originalname,
-        author_id : req.params.author_id
-    })
-    await post.save()
-    .then(
-        doc =>{res.status(200).json(doc)}
-    )
-    .catch(error=>{
-        throw error
-    })
+        const { type, description, sharelink, typeofpost } = req.body;
+        const posturl=req.file.buffer
+        const user_id = new mongoose.Types.ObjectId(req.userData.userId)
+
+        const post = new Post({ user_id, type, description, posturl, sharelink, typeofpost });
+        await post.save().then((result) => {
+                        res.status(201).json({ message: 'Post created successfully', post });
+        }).catch((err) => {
+
+        });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to create post' });
+      }
 }
+
+
 
 exports.delete_post= (req,res)=>{
 Post.findByIdAndRemove({_id:req.params.id}).exec().then(

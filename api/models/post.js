@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const postSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    numlikes: { required: true, type: String },
+    numlikes: { required: true, type: String, default: "0" },
     type: { required: true, type: String },
     description: { required: false, type: String },
     posturl: { required: true, type: String },
