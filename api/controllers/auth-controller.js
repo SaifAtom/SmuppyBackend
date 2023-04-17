@@ -12,12 +12,13 @@ var transport = nodemailer.createTransport({
     host: "smtp.mailtrap.io",
     port: 2525,
     auth: {
-      user: "e319c618dfc9cc",
-      pass: "280c385fb2fa81"
+      user: "7f0906b7915e21",
+      pass: "8196155fcb8c82"
     }
   });
 
 exports.user_signup=(req,res,next)=>{ 
+    try{
     User.find({email:req.body.email})
     .exec()
     .then(
@@ -31,12 +32,10 @@ exports.user_signup=(req,res,next)=>{
                 bcrypt.hash(req.body.password,10,(err,hash)=>{
                     if(err){
                         return res.status(500).json({
-                            error : err
+                            error : err.message
                         })
                     }
                     else{
-                        
-                        
                         const user = new User({
                             _id:new mongoose.Types.ObjectId(),
                             username : req.body.username,
@@ -49,16 +48,15 @@ exports.user_signup=(req,res,next)=>{
                                const verificationCode = user.generateVerificationCode()
                                User.updateOne({_id:doc._id},{ $set: { verificationCode: verificationCode }}).exec().then(
                                 result=>{ transport.sendMail({
-                                    to: "dhiabrinsi2020@gmail.com",
+                                    to: req.body.email,
                                     subject: 'Verify Account',
                                     html: `<p>your verification link :</p><a href="localhost:3000/auth/verification/${verificationCode}">Click here</a>`
-                                  }).then(
+                                }).then(
                                     res.send('Email verification sent!')
-                                    
-                                  ).catch()}
+                                  ).catch(
+                                  
+                                  )}
                                )
-                                
-                               
                             }
                         )
                     }
@@ -66,8 +64,12 @@ exports.user_signup=(req,res,next)=>{
             }
         }
     )
-    .catch()
-    
+    .catch(
+
+    )
+    }catch{
+        res.send(err)
+    }
     }
 
 exports.user_verification = async (req, res) => {
